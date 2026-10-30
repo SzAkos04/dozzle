@@ -1,0 +1,11 @@
+[Unit]
+Description=Update runner for the Dozzle fork (runs allowlisted scripts for its Update button)
+
+[Service]
+ExecStart=/usr/bin/python3 %h/update-runner/update-runner.py
+# docker0 may not be up yet at login; retry until it is.
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
