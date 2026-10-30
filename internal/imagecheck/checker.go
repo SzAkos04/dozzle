@@ -92,6 +92,11 @@ const SkipLabel = updatepolicy.LegacyCheckLabel
 // Skipped reports whether container labels set updates off for a container,
 // which also stops it being checked.
 func Skipped(labels map[string]string) bool {
+	// myGym fork: a container updated by a host script (see container/script_update.go) is built
+	// from a checkout, so its registry image says nothing about whether it is out of date.
+	if labels["dev.dozzle.update.script"] != "" {
+		return true
+	}
 	p, ok := updatepolicy.FromLabels(labels)
 	return ok && p == updatepolicy.Off
 }

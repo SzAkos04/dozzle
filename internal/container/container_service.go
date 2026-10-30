@@ -52,6 +52,12 @@ func (c *ContainerService) Update(ctx context.Context, source string, progressCh
 	}
 	var updated bool
 	var err error
+	if name := ScriptName(c.Container.Labels); name != "" {
+		c.recorded(ctx, source, progressCh, func(ch chan<- UpdateProgress) {
+			updated, err = runScript(ctx, name, ch)
+		})
+		return updated, err
+	}
 	c.recorded(ctx, source, progressCh, func(ch chan<- UpdateProgress) {
 		updated, err = c.clientService.UpdateContainer(ctx, c.Container, ch)
 	})
