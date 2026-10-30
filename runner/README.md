@@ -13,8 +13,8 @@ longer checked against a registry, since a locally built image says nothing abou
 
 Dozzle needs two environment variables:
 
-    DOZZLE_UPDATE_RUNNER=http://172.17.0.1:8085      # docker0 address of the host
-    DOZZLE_UPDATE_RUNNER_TOKEN=<same token as the runner's token_file>
+    UPDATE_RUNNER_URL=http://172.17.0.1:8085      # docker0 address of the host
+    UPDATE_RUNNER_TOKEN=<same token as the runner's token_file>
 
 ## Runner on the host
 

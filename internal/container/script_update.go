@@ -1,10 +1,10 @@
 package container
 
 // myGym fork: a container labelled dev.dozzle.update.script=<name> is not pulled and swapped by
-// Dozzle. Updating it asks a runner on the host (DOZZLE_UPDATE_RUNNER, e.g. http://172.17.0.1:8085)
+// Dozzle. Updating it asks a runner on the host (UPDATE_RUNNER_URL, e.g. http://172.17.0.1:8085)
 // to run the script of that name, such as the compose project's own server-update.sh, and streams
 // its output into Dozzle's log. The runner decides which names exist; Dozzle never sends a command.
-// Protocol: POST <runner>/run/<name> with "Authorization: Bearer <DOZZLE_UPDATE_RUNNER_TOKEN>",
+// Protocol: POST <runner>/run/<name> with "Authorization: Bearer <UPDATE_RUNNER_TOKEN>",
 // answered by the script's output line by line and a last line "::exit <code>".
 
 import (
@@ -44,9 +44,9 @@ func runScript(ctx context.Context, name string, ch chan<- UpdateProgress) (bool
 		return false, err
 	}
 
-	base := strings.TrimRight(os.Getenv("DOZZLE_UPDATE_RUNNER"), "/")
+	base := strings.TrimRight(os.Getenv("UPDATE_RUNNER_URL"), "/")
 	if base == "" {
-		return fail(fmt.Errorf("DOZZLE_UPDATE_RUNNER is not set, cannot run the %q update script", name))
+		return fail(fmt.Errorf("UPDATE_RUNNER_URL is not set, cannot run the %q update script", name))
 	}
 	send(UpdateProgress{Status: UpdateRecreating})
 
@@ -54,7 +54,7 @@ func runScript(ctx context.Context, name string, ch chan<- UpdateProgress) (bool
 	if err != nil {
 		return fail(err)
 	}
-	if token := os.Getenv("DOZZLE_UPDATE_RUNNER_TOKEN"); token != "" {
+	if token := os.Getenv("UPDATE_RUNNER_TOKEN"); token != "" {
 		req.Header.Set("Authorization", "Bearer "+token)
 	}
 	resp, err := http.DefaultClient.Do(req)

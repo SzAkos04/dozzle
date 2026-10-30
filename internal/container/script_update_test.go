@@ -12,8 +12,8 @@ func runAgainst(t *testing.T, handler http.HandlerFunc, name string) (bool, erro
 	t.Helper()
 	srv := httptest.NewServer(handler)
 	defer srv.Close()
-	t.Setenv("DOZZLE_UPDATE_RUNNER", srv.URL)
-	t.Setenv("DOZZLE_UPDATE_RUNNER_TOKEN", "tok")
+	t.Setenv("UPDATE_RUNNER_URL", srv.URL)
+	t.Setenv("UPDATE_RUNNER_TOKEN", "tok")
 
 	ch := make(chan UpdateProgress, 10)
 	updated, err := runScript(context.Background(), name, ch)
@@ -67,7 +67,7 @@ func TestRunScriptUnknownNameAndNoRunner(t *testing.T) {
 		t.Fatalf("updated=%v err=%v", updated, err)
 	}
 
-	t.Setenv("DOZZLE_UPDATE_RUNNER", "")
+	t.Setenv("UPDATE_RUNNER_URL", "")
 	ch := make(chan UpdateProgress, 2)
 	if updated, err := runScript(context.Background(), "x", ch); updated || err == nil {
 		t.Fatalf("no runner set: updated=%v err=%v", updated, err)
