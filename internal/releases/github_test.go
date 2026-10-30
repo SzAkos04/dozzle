@@ -68,3 +68,16 @@ func readTestdata(t *testing.T, name string) string {
 	}
 	return string(b)
 }
+
+func TestUpstreamVersion(t *testing.T) {
+	for in, want := range map[string]string{
+		"v11.4.0-fork.b509e4a9": "v11.4.0",
+		"v11.4.0":               "v11.4.0",
+		"v11.4.0-beta.1":        "v11.4.0-beta.1",
+		"main-abc1234":          "main-abc1234",
+	} {
+		if got := UpstreamVersion(in); got != want {
+			t.Errorf("UpstreamVersion(%q) = %q, want %q", in, got, want)
+		}
+	}
+}

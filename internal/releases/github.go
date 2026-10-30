@@ -50,7 +50,15 @@ func OnReleaseLine(version string) bool {
 	return releaseVersion.MatchString(version)
 }
 
+// UpstreamVersion is the upstream release a build is based on. The myGym fork builds as
+// v11.4.0-fork.<commit>, which matches no release tag, so every release would read as newer.
+func UpstreamVersion(version string) string {
+	base, _, _ := strings.Cut(version, "-fork.")
+	return base
+}
+
 func Fetch(currentVersion string) ([]Release, error) {
+	currentVersion = UpstreamVersion(currentVersion)
 	response, err := http.Get("https://api.github.com/repos/amir20/dozzle/releases?per_page=9")
 	if err != nil {
 		return nil, err
