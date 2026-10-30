@@ -37,3 +37,10 @@ Tests: `python3 runner/test_update_runner.py`, and `go test ./internal/container
 ## Updating the fork itself
 
 `server-update.sh` builds this checkout and restarts Dozzle. Run it over ssh.
+
+## Projects using it
+
+A project opts in with a compose override that adds the label; the override lives in `runner/compose/`
+and the project's `.env` on the server loads it through `COMPOSE_FILE`, so the project's own repo stays
+free of Dozzle. `compose/mygym.yml` is myGym's. Each name used needs an entry in the runner's
+`scripts` config.

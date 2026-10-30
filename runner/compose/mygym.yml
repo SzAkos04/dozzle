@@ -1,0 +1,11 @@
+# Compose override that makes Dozzle's Update button run myGym's scripts/server-update.sh (through the
+# update runner's "mygym" entry) instead of swapping in upstream's image. Kept here, not in the myGym
+# repo; the server's ~/myGym/.env loads it:
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.override.yml:/home/szakos/dozzle-src/runner/compose/mygym.yml
+services:
+  web:
+    labels:
+      dev.dozzle.update.script: mygym
+  api:
+    labels:
+      dev.dozzle.update.script: mygym
